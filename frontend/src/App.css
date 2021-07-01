@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Racing+Sans+One&display=swap');
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font-size: 1.6rem;
+	font-family: 'Lato', sans-serif;
+	background: rgb(12, 28, 61);
+	background: linear-gradient(90deg, rgba(12, 28, 61, 1) 0%, rgba(0, 0, 0, 1) 100%);
+	color: black;
+}
+
+main {
+	margin: 0 auto;
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	text-align: center;
+	padding: 2rem;
+}
+
+.logo-container {
+	margin-bottom: 10rem;
+}
+
+.img-responsive-logo {
+	max-width: 60rem;
+	width: 100%;
+}
+
+.img-responsive-logo-subpage {
+	max-width: 40rem;
+	width: 100%;
+}
+
+.img-responsive-husky {
+	max-width: 40rem;
+	width: 100%;
+}
+
+.buttondashboard-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 10rem;
+}
+
+.dogimon-dogidex-count {
+	color: #49cb9c;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+}
+
+.dogimon-dogidex-count h1 {
+	font-weight: bold;
+	font-size: 2rem;
+}
+
+.dogimon-dogidex-count p {
+	margin: 1rem 0 1rem 0;
+}
+
+.divider-line {
+	width: 10rem;
+	height: 0.2rem;
+	background: #49cb9c;
+}
+
+/* CSS Loader */
+
+.progress-8 {
+	width: 60px;
+	height: 60px;
+	border: 15px solid #ddd;
+	border-radius: 50%;
+	position: relative;
+	transform: rotate(45deg);
+}
+.progress-8::before {
+	content: '';
+	position: absolute;
+	inset: -15px;
+	border-radius: 50%;
+	border: 15px solid #49cb9c;
+	animation: p8 2s infinite linear;
+}
+
+@keyframes p8 {
+	0% {
+		clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+	}
+	25% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+	}
+	50% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+	}
+	75% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+	}
+	100% {
+		clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+	}
+}
+
+/* Dogimon Dashboard Screen */
+
+.dogimon-profile-main {
+	margin: 0 auto;
+	width: 100rem;
+	max-width: 100%;
+	text-align: center;
+	padding: 2rem;
+}
+
+.dogidex-dashboard-profiles-container {
+	margin-top: 8rem;
+	color: white;
+	display: flex;
+	justify-content: center;
+}
+
+.dogimon-profile-container {
+	display: grid;
+	grid-gap: 2rem;
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.dogimon-profile-container a {
+	display: block;
+	width: 15rem;
+	height: 20rem;
+	padding: 0;
+	border: none;
+	transition: border 0.2s;
+}
+
+.dogimon-profile-container a:hover {
+	border: 5px solid #ffcb0b;
+}
+
+.dogimon-profiles {
+	background: rgb(170, 229, 137);
+	background: linear-gradient(90deg, rgba(170, 229, 137, 1) 0%, rgba(73, 203, 156, 1) 100%);
+	width: 15rem;
+	height: 20rem;
+	padding: 2rem;
+	border-radius: 0.5rem;
+}
+
+.dogimon-profiles h1 {
+	font-family: 'Racing Sans One', cursive;
+	letter-spacing: 0.1rem;
+	font-size: 2rem;
+	color: #000000;
+}
+
+.dogimon-profiles h1 span {
+	font-family: 'Lato', sans-serif;
+	font-size: 2rem;
+	font-weight: 100;
+}
+
+.dogimon-profiles img {
+	margin: 1rem 0 1rem 0;
+}
+
+.dogimon-profiles p {
+	font-weight: bold;
+	color: #000000;
+	font-size: 1.2rem;
+	margin-bottom: 1rem;
+}
+
+.dogimon-healthbar-100 {
+	background: #0aab3c;
+	width: 100%;
+	height: 0.5rem;
+	border-radius: 0.5rem;
+}
+
+/* Dogidex Profile Screen */
+
+.dogidex-profiles-screen-loader {
+	display: flex;
+	justify-content: center;
+}
+
+.dogidex-profile-screen-main {
+	margin: 0 auto;
+	width: 100rem;
+	max-width: 100%;
+	text-align: center;
+	padding: 2rem;
+}
+
+.dogidex-profiles-screen-container {
+	background: rgb(226, 226, 226);
+	background: linear-gradient(90deg, rgba(226, 226, 226, 1) 0%, rgba(250, 250, 250, 1) 100%);
+	border-radius: 0.5rem;
+	padding: 2rem;
+}
+
+.dogimon-profile-container-details img {
+	width: 100%;
+	max-width: 15rem;
+	position: relative;
+	bottom: 8rem;
+}
+
+.dogimon-profile-container-details h1 {
+	font-weight: bold;
+	font-size: 3rem;
+	margin: 1rem 0 1rem 0;
+}
+
+.dogimon-healthbar-profile {
+	margin: 1rem auto;
+	width: 30rem;
+}
+
+.dogimon-dog-hp {
+	font-size: 1.4rem;
+	font-weight: bold;
+}
+
+.dogimon-dog-stats {
+	margin: 2rem auto;
+	width: 40rem;
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-around;
+}
+
+.dogimon-dog-stats p {
+	font-weight: 300;
+	text-transform: uppercase;
+}
+
+.dogimon-dog-description {
+	margin: 2rem 0 2rem 0;
+}
+hr {
+	border-top: 0.01rem solid #e2e2e2;
+}
+
+.dogimon-dog-temperament {
+	background: #fce7f0;
+	padding: 1.5rem;
+}
+
+.dogimon-dog-temperament-attributes {
+	color: white;
+	background: #e880b7;
+	margin-bottom: 1rem;
+	padding: 0.1rem;
+	font-family: 'Racing Sans One', cursive;
+	border-radius: 0.5rem;
+}
+
+.dogimon-dog-temperament-heading {
+	text-transform: uppercase;
+	color: black;
+}
+
+.dogimon-index-container {
+	display: flex;
+	justify-content: center;
+	margin-top: 4rem;
+}
+
+/* Dogimon Media Queries */
+
+@media screen and (max-width: 900px) {
+	.dogimon-profile-container {
+		justify-content: center;
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.dogimon-profile-container {
+		justify-content: center;
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.dogimon-profile-container {
+		justify-content: center;
+		grid-template-columns: repeat(1, 1fr);
+	}
+}
