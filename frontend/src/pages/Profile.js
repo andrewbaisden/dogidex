@@ -8,8 +8,9 @@ const Profile = () => {
 	useEffect(() => {
 		const getAPI = async () => {
 			const API = 'http://localhost:8000/online/harperdb';
+			const API2 = 'https://dogidex-andrewbaisden.vercel.app/online/harperdb';
 
-			const response = await axios.get(API);
+			const response = await axios.get(API2);
 
 			try {
 				console.log('Profile Page', response.data);
