@@ -7,7 +7,7 @@ import Logo from '../../src/img/logo.png';
 const Dashboard = () => {
 	useEffect(() => {
 		const getAPI = async () => {
-			const API = 'http://localhost:8000/online/harperdb';
+			// const API = 'http://localhost:8000/online/harperdb';
 			const API2 = 'https://dogidex-andrewbaisden.vercel.app/online/harperdb';
 
 			const response = await axios.get(API2);
