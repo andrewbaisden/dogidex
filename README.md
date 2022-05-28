@@ -1,6 +1,6 @@
 # Dogidex App
 
-![https://res.cloudinary.com/d74fh3kw/image/upload/v1625493225/dogidex_hf0eum.png](https://res.cloudinary.com/d74fh3kw/image/upload/v1625493225/dogidex_hf0eum.png 'Dogidex')
+![Dogidex](/img/dogidex.png 'Dogidex')
 
 ## Install and Setup
 
