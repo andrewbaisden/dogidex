@@ -42,6 +42,8 @@ npm start
 
 Open **http://localhost:3000** (the React app). Port **8000** is only the API.
 
+Deploy: Netlify uses `netlify.toml` (base `frontend`, Node 18, `npm ci`). Do not commit a `yarn.lock` for the frontend — this project uses `package-lock.json`.
+
 Optional: set `REACT_APP_API_URL` if the API is not at `http://localhost:8000` (e.g. a deployed Vercel URL).
 
 ## Dog images

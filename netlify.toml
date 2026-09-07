@@ -1,0 +1,9 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  NODE_VERSION = "18"
+  # Prefer npm + package-lock.json (do not use Yarn for this site)
+  NETLIFY_USE_YARN = "false"
