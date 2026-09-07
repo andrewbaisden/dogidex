@@ -38,8 +38,10 @@ Frontend stays on Netlify; only the API goes to Vercel.
 3. In Vercel → Project → Settings → Environment Variables, set `DATABASE_URL` to your Supabase **Session pooler** URI (Production + Preview).
 4. Deploy, then open `https://<your-project>.vercel.app/` — you should see the JSON API help payload.
 5. In Netlify → Site settings → Environment variables, set:
-   - `REACT_APP_API_URL` = `https://<your-project>.vercel.app` (no trailing slash)
+   - `REACT_APP_API_URL` = `https://<your-project>.vercel.app` (**no trailing slash**)
 6. Trigger a **new Netlify deploy** so Create React App bakes in that URL at build time.
+
+**Vercel Deployment Protection:** If the API URL redirects to `vercel.com/sso-api`, the deployment is SSO-protected and browsers will fail with a CORS/network error. In the Vercel project → **Settings → Deployment Protection**, turn protection **off** for Production (or allow public access) so Netlify can call the API anonymously. Prefer the stable production domain, not a one-off `*.vercel.app` deployment URL with a hash in the name.
 
 ## Frontend
 

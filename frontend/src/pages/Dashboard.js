@@ -4,8 +4,7 @@ import axios from 'axios';
 import '../App.css';
 import Logo from '../../src/img/logo.png';
 import { dogImageSrc } from '../utils/dogImages';
-
-const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+import { API_BASE } from '../utils/api';
 
 const Dashboard = () => {
 	const [data, setData] = useState([]);
