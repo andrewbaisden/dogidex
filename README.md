@@ -31,18 +31,18 @@ API runs at `http://localhost:8000`:
 
 ## Frontend
 
-This app expects **Node 18–22** (Create React App). With [fnm](https://github.com/Schniz/fnm):
+This app expects **Node 20–22** (Create React App + Netlify Prerender). With [fnm](https://github.com/Schniz/fnm):
 
 ```bash
 cd frontend
-fnm use   # reads .node-version → Node 18
+fnm use   # reads .node-version → Node 20
 npm install
 npm start
 ```
 
 Open **http://localhost:3000** (the React app). Port **8000** is only the API.
 
-Deploy: Netlify uses `netlify.toml` (base `frontend`, Node 18, `npm ci`). Do not commit a `yarn.lock` for the frontend — this project uses `package-lock.json`.
+Deploy: Netlify uses `netlify.toml` (base `frontend`, Node 20, `npm run build`). Do not commit a `yarn.lock` for the frontend — this project uses `package-lock.json`.
 
 Optional: set `REACT_APP_API_URL` if the API is not at `http://localhost:8000` (e.g. a deployed Vercel URL).
 

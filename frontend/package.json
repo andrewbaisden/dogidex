@@ -22,7 +22,7 @@
     "build-storybook": "build-storybook -s public"
   },
   "engines": {
-    "node": ">=18 <23"
+    "node": ">=20 <23"
   },
   "eslintConfig": {
     "extends": [
