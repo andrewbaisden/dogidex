@@ -1,0 +1,175 @@
+-- Run this in the Supabase SQL editor (or: psql $DATABASE_URL -f sql/schema.sql)
+-- Safe to re-run: creates the table if needed, upserts seed rows, enables RLS.
+-- img is a slug matching frontend/public/dogs_transparent/<slug>.png
+
+CREATE TABLE IF NOT EXISTS dogs (
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  level INTEGER,
+  img TEXT,
+  health_bar INTEGER,
+  health_points INTEGER,
+  weight NUMERIC,
+  type TEXT,
+  height NUMERIC,
+  description TEXT,
+  temperament TEXT
+);
+
+-- Required on Supabase: without RLS, the anon key could expose the table.
+ALTER TABLE dogs ENABLE ROW LEVEL SECURITY;
+
+-- Public read-only access (Dogidex is a public catalog).
+-- Writes stay locked to the service role / DATABASE_URL connection used by Express.
+DROP POLICY IF EXISTS "Public can read dogs" ON dogs;
+CREATE POLICY "Public can read dogs"
+  ON dogs
+  FOR SELECT
+  TO anon, authenticated
+  USING (true);
+
+-- Idempotent seed (no TRUNCATE/DELETE): re-running updates the same 10 rows.
+INSERT INTO dogs (id, name, level, img, health_bar, health_points, weight, type, height, description, temperament) VALUES
+(
+  1,
+  'Siberian Husky',
+  64,
+  'siberian_husky',
+  100,
+  300,
+  72,
+  'Husky',
+  60,
+  'The Siberian Husky is a medium-sized working sled dog breed. The breed belongs to the Spitz genetic family. It is recognizable by its thickly furred double coat erect triangular ears and distinctive markings and is smaller than the similar-looking Alaskan Malamute.',
+  'Intelligent Friendly Outgoing Alert Gentle'
+),
+(
+  2,
+  'German Shepherd',
+  10,
+  'german_shepherd',
+  100,
+  60,
+  40,
+  'Shepherd',
+  65,
+  'The German Shepherd is a breed of medium to large-sized working dog that originated in Germany. According to the FCI the breed''s English language name is German Shepherd Dog.',
+  'Intelligent Stubborn Loyal Obedient Alert Watchful Confident Curious Courageous'
+),
+(
+  3,
+  'Bulldog',
+  33,
+  'bulldog',
+  100,
+  120,
+  25,
+  'British Bulldog',
+  40,
+  'The Bulldog also known as the English Bulldog or British Bulldog is a medium-sized dog breed. It is a muscular hefty dog with a wrinkled face and a distinctive pushed-in nose. The Kennel Club the American Kennel Club and the United Kennel Club oversee breeding records.',
+  'Willful Docile Friendly Gregarious'
+),
+(
+  4,
+  'Golden Retriever',
+  2,
+  'golden_retriever',
+  100,
+  12,
+  34,
+  'Retriever',
+  61,
+  'The Golden Retriever is a medium-large gun dog that was bred to retrieve shot waterfowl such as ducks and upland game birds during hunting and shooting parties. The name ''retriever'' refers to the breed''s ability to retrieve shot game undamaged due to their soft mouth.',
+  'Intelligent Friendly Kind Reliable Trustworthy Confident'
+),
+(
+  5,
+  'Poodle',
+  17,
+  'poodle',
+  100,
+  55,
+  20,
+  'Poodle',
+  60,
+  'The Poodle called the Pudel in German and the Caniche in French is a breed of water dog. The breed is divided into four varieties based on size the Standard Poodle Medium Poodle Miniature Poodle and Toy Poodle although the Medium Poodle variety is not universally recognised.',
+  'Intelligent Alert Faithful Active Instinctual Trainable'
+),
+(
+  6,
+  'Chihuahua',
+  17,
+  'chihuahua',
+  100,
+  25,
+  3,
+  'Chihuahua',
+  25,
+  'The Chihuahua is one of the smallest breeds of dog and is named after the Mexican state of Chihuahua.',
+  'Devoted Aggressive Lively Alert Quick Courageous'
+),
+(
+  7,
+  'Rottweiler',
+  37,
+  'rottweiler',
+  100,
+  170,
+  60,
+  'Rottweiler',
+  69,
+  'The Rottweiler is a breed of domestic dog regarded as medium-to-large or large. The dogs were known in German as Rottweiler Metzgerhund meaning Rottweil butchers'' dogs because their main use was to herd livestock and pull carts laden with butchered meat to market.',
+  'Good-natured Devoted Obedient Alert Fearless Confident Self-assured Steady Calm Courageous'
+),
+(
+  8,
+  'Pug',
+  50,
+  'pug',
+  100,
+  240,
+  8,
+  'Pug',
+  36,
+  'The pug is a breed of dog with physically distinctive features of a wrinkly short-muzzled face and curled tail. The breed has a fine glossy coat that comes in a variety of colours most often light brown or black and a compact square body with well-developed muscles.',
+  'Playful Affectionate Charming Stubborn Mischievous Clever Docile Sociable Loving Attentive Quiet Calm'
+),
+(
+  9,
+  'Samoyed',
+  5,
+  'samoyed',
+  100,
+  24,
+  30,
+  'Samoyed',
+  55,
+  'The Samoyed is a breed of medium-sized herding dogs with thick white double-layer coats. They are related to the laika a spitz-type dog. It takes its name from the Samoyedic peoples of Siberia. These nomadic reindeer herders bred the fluffy white dogs to help with herding.',
+  'Playful Friendly Stubborn Sociable Lively Alert'
+),
+(
+  10,
+  'Akita Inu',
+  7,
+  'akita_inu',
+  100,
+  35,
+  39,
+  'Akita',
+  70,
+  'The Akita is a large breed of dog originating from the mountainous regions of northern Japan. There are two separate varieties of Akita: a Japanese strain commonly called Akita Inu or Japanese Akita and an American strain known as the Akita or American Akita.',
+  'Playful Friendly Intelligent Affectionate Active Alert'
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  level = EXCLUDED.level,
+  img = EXCLUDED.img,
+  health_bar = EXCLUDED.health_bar,
+  health_points = EXCLUDED.health_points,
+  weight = EXCLUDED.weight,
+  type = EXCLUDED.type,
+  height = EXCLUDED.height,
+  description = EXCLUDED.description,
+  temperament = EXCLUDED.temperament;
+
+SELECT setval(pg_get_serial_sequence('dogs', 'id'), (SELECT MAX(id) FROM dogs));

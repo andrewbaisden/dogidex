@@ -1,69 +1,64 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const axios = require('axios');
+const { Pool } = require('pg');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-// CORS implemented so that we don't get errors when trying to access the server from a different server location
 app.use(cors());
 
-// HarperDB Database routes
+if (!process.env.DATABASE_URL) {
+	console.error('Missing DATABASE_URL. Set it in backend/.env (Neon or Supabase Postgres connection string).');
+	process.exit(1);
+}
 
-// GET: Fetch all dogs from the database
-app.get('/online/harperdb', (req, res) => {
-	const data = { operation: 'sql', sql: 'SELECT * FROM dev.dogs' };
-
-	const config = {
-		method: 'post',
-		url: process.env.HARPERDB_URL,
-		headers: {
-			Authorization: `Basic ${process.env.HARPERDB_AUTH}`,
-			'Content-Type': 'application/json',
-		},
-		data: data,
-	};
-
-	axios(config)
-		.then((response) => {
-			const data = response.data;
-			console.log(data);
-			res.json(data);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
+	connectionTimeoutMillis: 10000,
 });
 
-// GET: Fetch dog by dogId from the database
-app.get('/online/harperdb/:dogId', (req, res) => {
-	const dogId = req.params.dogId;
-	console.log(dogId);
+app.get('/', (req, res) => {
+	res.json({
+		message: 'Dogidex API',
+		endpoints: ['GET /online/dogs', 'GET /online/dogs/:dogId'],
+	});
+});
 
-	const data = { operation: 'sql', sql: `SELECT * FROM dev.dogs WHERE id = "${dogId}"` };
-
-	const config = {
-		method: 'post',
-		url: process.env.HARPERDB_URL,
-		headers: {
-			Authorization: `Basic ${process.env.HARPERDB_AUTH}`,
-			'Content-Type': 'application/json',
-		},
-		data: data,
-	};
-
-	axios(config)
-		.then((response) => {
-			const data = response.data;
-			console.log(data);
-			res.json(data);
-		})
-		.catch((error) => {
-			console.log(error);
+// GET: Fetch all dogs from the database
+app.get('/online/dogs', async (req, res) => {
+	try {
+		const { rows } = await pool.query('SELECT * FROM dogs ORDER BY id ASC');
+		res.json(rows);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			error: 'Failed to fetch dogs',
+			code: error.code,
+			detail: error.message,
+			hint:
+				error.code === 'ETIMEDOUT' || error.code === 'ENETUNREACH'
+					? 'Direct Supabase host is IPv6-only. Use the Session pooler URI from Project Settings → Database (host ends in pooler.supabase.com).'
+					: undefined,
 		});
+	}
+});
+
+// GET: Fetch dog by id from the database
+app.get('/online/dogs/:dogId', async (req, res) => {
+	try {
+		const { rows } = await pool.query('SELECT * FROM dogs WHERE id = $1', [req.params.dogId]);
+		res.json(rows);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({
+			error: 'Failed to fetch dog',
+			code: error.code,
+			detail: error.message,
+		});
+	}
 });
 
 const port = process.env.PORT || 8000;
