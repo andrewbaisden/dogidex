@@ -9,16 +9,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-if (!process.env.DATABASE_URL) {
-	console.error('Missing DATABASE_URL. Set it in backend/.env (Neon or Supabase Postgres connection string).');
-	process.exit(1);
-}
-
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL,
-	ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
-	connectionTimeoutMillis: 10000,
-});
+const pool = process.env.DATABASE_URL
+	? new Pool({
+			connectionString: process.env.DATABASE_URL,
+			ssl: process.env.DATABASE_SSL === 'false' ? false : { rejectUnauthorized: false },
+			connectionTimeoutMillis: 10000,
+	  })
+	: null;
 
 app.get('/', (req, res) => {
 	res.json({
@@ -29,6 +26,9 @@ app.get('/', (req, res) => {
 
 // GET: Fetch all dogs from the database
 app.get('/online/dogs', async (req, res) => {
+	if (!pool) {
+		return res.status(500).json({ error: 'Missing DATABASE_URL' });
+	}
 	try {
 		const { rows } = await pool.query('SELECT * FROM dogs ORDER BY id ASC');
 		res.json(rows);
@@ -48,6 +48,9 @@ app.get('/online/dogs', async (req, res) => {
 
 // GET: Fetch dog by id from the database
 app.get('/online/dogs/:dogId', async (req, res) => {
+	if (!pool) {
+		return res.status(500).json({ error: 'Missing DATABASE_URL' });
+	}
 	try {
 		const { rows } = await pool.query('SELECT * FROM dogs WHERE id = $1', [req.params.dogId]);
 		res.json(rows);
@@ -61,6 +64,14 @@ app.get('/online/dogs/:dogId', async (req, res) => {
 	}
 });
 
-const port = process.env.PORT || 8000;
+// Local: `npm start`. Vercel: exports the Express app as a serverless function.
+if (require.main === module) {
+	if (!process.env.DATABASE_URL) {
+		console.error('Missing DATABASE_URL. Set it in backend/.env (Neon or Supabase Postgres connection string).');
+		process.exit(1);
+	}
+	const port = process.env.PORT || 8000;
+	app.listen(port, () => console.log(`Server running on ${port}, http://localhost:${port}`));
+}
 
-app.listen(port, () => console.log(`Server running on ${port}, http://localhost:${port}`));
+module.exports = app;

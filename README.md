@@ -29,6 +29,18 @@ API runs at `http://localhost:8000`:
 - `GET /online/dogs` — all dogs
 - `GET /online/dogs/:dogId` — one dog by id
 
+### Deploy API (Vercel)
+
+Frontend stays on Netlify; only the API goes to Vercel.
+
+1. Import the GitHub repo in Vercel (or link an existing project).
+2. Root `vercel.json` deploys **only** the `backend` service (ignore the multi-service template that also includes `frontend`).
+3. In Vercel → Project → Settings → Environment Variables, set `DATABASE_URL` to your Supabase **Session pooler** URI (Production + Preview).
+4. Deploy, then open `https://<your-project>.vercel.app/` — you should see the JSON API help payload.
+5. In Netlify → Site settings → Environment variables, set:
+   - `REACT_APP_API_URL` = `https://<your-project>.vercel.app` (no trailing slash)
+6. Trigger a **new Netlify deploy** so Create React App bakes in that URL at build time.
+
 ## Frontend
 
 This app expects **Node 20–22** (Create React App + Netlify Prerender). With [fnm](https://github.com/Schniz/fnm):
